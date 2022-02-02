@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict, List
+from typing import Dict, Type
 
 
 @dataclass
@@ -130,29 +130,24 @@ class Swimming(Training):
                 * self.COEFF_SWM_2 * self.weight)
 
 
-dict_training: Dict[str, List[float]] = {'SWM': Swimming,
-                                         'RUN': Running,
-                                         'WLK': SportsWalking
-                                         }
+dict_training: Dict[str, Type[Training]] = {'SWM': Swimming,
+                                            'RUN': Running,
+                                            'WLK': SportsWalking,
+                                            }
 
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    try:
-        return dict_training[workout_type](*data)
-    except KeyError as ke:
-        print('Not found training in dictionary:', ke)
-    except TypeError:
-        print('Incorrect data from the fitness tracker')
+    if workout_type not in dict_training:
+        raise ValueError('Неверные данные')
+    return dict_training[workout_type](*data)
 
 
 def main(training: Training) -> None:
     """Главная функция."""
-    try:
+    if training is not None:
         info: InfoMessage = training.show_training_info()
         print(info.get_message())
-    except AttributeError as ae:
-        print(ae)
 
 
 if __name__ == '__main__':
