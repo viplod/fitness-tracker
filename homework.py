@@ -1,5 +1,5 @@
-from dataclasses import dataclass, asdict
-from typing import Dict, Type, Any
+from dataclasses import asdict, dataclass
+from typing import Dict, Type
 
 
 @dataclass
@@ -21,8 +21,7 @@ class InfoMessage:
 
     def get_message(self) -> str:
         """Получить строку по тренировкам"""
-        dict_param: Dict[Any, Any] = asdict(self)
-        return self.STR_RETURN.format(**dict_param)
+        return self.STR_RETURN.format(**asdict(self))
 
 
 class Training:
